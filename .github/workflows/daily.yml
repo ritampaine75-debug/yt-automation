@@ -1,0 +1,30 @@
+name: YouTube Automation
+
+on:
+  schedule:
+    # প্রতিদিন দুপুর ১২:৩০ UTC (অর্থাৎ ভারতীয় সময় সন্ধ্যা ৬:৩০)
+    - cron: '30 12 * * *'
+  workflow_dispatch: # এটি থাকলে আপনি নিজেও যখন ইচ্ছা বাটন টিপে রান করতে পারবেন
+
+jobs:
+  run-script:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Code Checkout
+        uses: actions/checkout@v3
+
+      - name: Python Setup
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.9'
+
+      - name: Install Libraries
+        run: pip install -r requirements.txt
+
+      - name: Run Automation Script
+        env:
+          YT_API_KEY: ${{ secrets.YT_API_KEY }}
+          GMAIL_USER: ${{ secrets.GMAIL_USER }}
+          GMAIL_PASS: ${{ secrets.GMAIL_PASS }}
+        run: python main.py
+        
